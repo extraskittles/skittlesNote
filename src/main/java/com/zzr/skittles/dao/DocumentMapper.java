@@ -13,9 +13,9 @@ public interface DocumentMapper {
 
     Document selectByPrimaryKey(Integer id);
 
-    List<Document> selectAll();
-
     int updateByPrimaryKeySelective(Document record);
 
     int updateByPrimaryKey(Document record);
+
+    List<Document> selectAll();
 }

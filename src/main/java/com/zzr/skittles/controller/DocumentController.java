@@ -1,6 +1,5 @@
 package com.zzr.skittles.controller;
 
-import com.zzr.skittles.dao.DocumentMapper;
 import com.zzr.skittles.domain.Document;
 import com.zzr.skittles.result.CommonResult;
 import com.zzr.skittles.service.DocumentService;

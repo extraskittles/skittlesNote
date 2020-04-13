@@ -32,9 +32,9 @@
         </div>
         <div id="editor">
             <div id="editor_top">
-              <!--  <input id="title" type="text" value="标题">-->
-                <div id="title" >标题:{{selectedDoc.title}}</div>
-                <div id="save">保存</div>
+                <input id="title" type="text" v-model="selectedDoc.title">
+                <!--<div id="title" >标题:{{selectedDoc.title}}</div>-->
+                <div id="save" v-on:click="save()">保存</div>
             </div>
             <div id="editor_text">
             </div>
@@ -113,6 +113,26 @@
                         this.documentList=response.data.data;
                     }
                 })
+            },
+            save:function () {
+                let document={}
+                document.id=this.selectedDoc.id;
+                document.title=this.selectedDoc.title;
+                document.html=editor_text.txt.html();
+                let a=3;
+                axios({
+                    method:"post",
+                    url:"/updateDocument",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    data:document
+                }).then((response)=>{
+                    if(response.data.code==200){
+                      this.selectDocs();
+                        alert("保存成功")
+                    }
+                })
             }
         },
 
@@ -131,6 +151,7 @@
     var E = window.wangEditor
     var editor_text = new E('#editor_text')
     // 或者 var editor = new E( document.getElementById('editor') )
+    editor_text.customConfig.uploadImgShowBase64 = true   // 使用 base64 保存图片
     editor_text.create()
 </script>
 </html>
