@@ -1,0 +1,31 @@
+#note{
+    display: flex;
+    flex-direction: row;
+}
+#document{
+    display: flex;
+    flex-direction: column;
+    width: 8rem;
+}
+#document_top{
+
+}
+#document_top_add{
+    text-align: center;
+}
+#document_top_del{
+    text-align: center;
+}
+#document_list{
+    display: flex;
+    flex-direction: column;
+}
+#document_list_element{
+    text-align: center;
+    margin: 1rem;
+}
+#editor_top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

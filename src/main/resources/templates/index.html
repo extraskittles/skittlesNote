@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>zzr文档</title>
+</head>
+<link type="text/css" rel="stylesheet" href="/css/index.css">
+<body>
+<div id="app"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
+<script src="//unpkg.com/wangeditor/release/wangEditor.min.js"></script>
+<script type="text/x-template" id="template">
+    <div id="note">
+        <div id="document">
+            <div id="document_top">
+                <div id="document_top_add" v-on:click="addDoc()">
+                    添加文档
+                </div>
+                <div id="document_top_del" v-on:click="delDoc()">
+                    删除文档
+                </div>
+            </div>
+            <div id="document_list">
+               <div id="document_list_element" v-for="document in documentList" v-on:click="selectDoc(document)">
+                   {{document.title}}
+               </div>
+            </div>
+        </div>
+        <div id="editor">
+            <div id="editor_top">
+              <!--  <input id="title" type="text" value="标题">-->
+                <div id="title" >标题:{{selectedDoc.title}}</div>
+                <div id="save">保存</div>
+            </div>
+            <div id="editor_text">
+            </div>
+        </div>
+    </div>
+
+</script>
+<script>
+    let app = new Vue({
+        el: '#app',
+        template: "#template",
+        data: function () {
+            return {
+                documentList:[],
+                selectedDoc:{},
+            };
+        },
+        methods: {
+            addDoc:function(){
+              let document={};
+              document.title="无标题笔记";
+              document.html="内容"
+                //增加文件
+                axios({
+                    method:"post",
+                    url:"/addDocument",
+                    headers:{
+                      "Content-Type":"application/json"
+                    },
+                    data:document
+                }).then((response)=>{
+                    if(response.data.code==200){
+                        //更新文档列表
+                        alert("添加文件成功")
+                        this.selectDocs();
+                    }
+                })
+
+            },
+            delDoc:function(){
+                axios({
+                    method:"post",
+                    url:"/deleteDocument",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    data:this.selectedDoc.id
+                }).then((response)=>{
+                    if(response.data.code==200){
+                        alert("删除成功")
+                        this.selectDocs();
+                    }
+                }
+                )
+            },
+            //查询单个文档,并赋值到editor_text
+            selectDoc:function (document) {
+                let aa=document;
+                axios({
+                    method:"get",
+                    url: "/selectDocument",
+                    params:{
+                        documentId:document.id
+                    }
+                }).then((response)=>{
+                    if(response.data.code==200){
+                        this.selectedDoc=response.data.data;
+                        editor_text.txt.html(response.data.data.html);
+                    }
+                })
+            },
+            //查询文档列表
+            selectDocs:function () {
+                axios.get("/selectDocuments").then((response)=>{
+                    if(response.data.code==200){
+                        this.documentList=response.data.data;
+                    }
+                })
+            }
+        },
+
+        beforecreated: function () {
+
+        },
+        created: function () {
+            this.selectDocs();
+        },
+        mounted: function () {
+        },
+        computed:{
+
+        }
+    })
+    var E = window.wangEditor
+    var editor_text = new E('#editor_text')
+    // 或者 var editor = new E( document.getElementById('editor') )
+    editor_text.create()
+</script>
+</html>
