@@ -150,8 +150,14 @@
     })
     var E = window.wangEditor
     var editor_text = new E('#editor_text')
-    // 或者 var editor = new E( document.getElementById('editor') )
-    editor_text.customConfig.uploadImgShowBase64 = true   // 使用 base64 保存图片
+    //处理保存图片的接口
+    editor_text.customConfig.uploadImgServer = '/receivePicture'
+    //文件名
+    editor_text.customConfig.uploadFileName = 'file'
+    /*editor_text.customConfig.uploadImgHeaders = {
+        'Content-Type': 'multipart/form-data'
+    }*/
+    editor_text.customConfig.debug = true;
     editor_text.create()
 </script>
 </html>

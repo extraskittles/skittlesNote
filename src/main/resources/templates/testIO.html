@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="https://cdn.bootcss.com/axios/0.17.1/axios.min.js"></script>
+<body>
+        <div>图片</div>
+        <input id="pic" type="file" name="pic" src="C:\Users\extra\Desktop\项目图片\active_me.png">
+        <div onclick="uploadFile()">点击</div>
+</body>
+<script>
+    let uploadFile=function(){
+        alert("begin")
+        let pic=document.getElementById("pic");
+        let formData = new FormData;
+        formData.append("pic",pic)
+        axios.post({
+            method:"post",
+            url:"/receivePicture",
+            data:formData,
+            headers:{
+                "Content-Type":"multipart/form-data"
+            }
+        }).then((response)=>{
+            if(response.data.code==200){
+                alert("上传成功")
+            }
+        })
+    }
+
+</script>
+</html>
